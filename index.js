@@ -2,7 +2,7 @@
 
 "use strict";
 
-const { execSync, spawn } = require("child_process");
+const { execSync } = require("child_process");
 const program = require("commander");
 const pkg = require("./package.json");
 const fs = require("fs");

@@ -19,7 +19,7 @@ const executeCmd = async cmd => {
   });
 };
 const escapeQuotes = string => string.replace(/("|')/gm, `\\$1`);
-const stringify = string => escapeQuotes(JSON.stringify(string));
+const stringify = string => JSON.stringify(string).replace(/("|')/gm, `\$1`);
 const compose = (...functions) => args =>
   functions.reduceRight((arg, fn) => fn(arg), args);
 const redConsoleText = string => `\x1b[31m${string}\x1b[0m`;
@@ -75,6 +75,9 @@ program
           redConsoleText
         )("That project already exists.")
       );
+
+    if (Number.parseInt(process.version) >= 10)
+      return console.error("Node version must be >= 10.*");
 
     if (cmd.npm)
       console.log(

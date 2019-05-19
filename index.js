@@ -1,3 +1,7 @@
+#!/usr/bin/env node
+
+"use strict";
+
 const { execSync, spawn } = require("child_process");
 const program = require("commander");
 const pkg = require("./package.json");

@@ -1,6 +1,6 @@
 {
   "name": "create-react-typescript",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Create a new TypeScript Create-React-App with Eslint & Prettier pre-configured.",
   "main": "index.ts",
   "bin": "index.js",

@@ -2,8 +2,15 @@
   "name": "create-react-typescript",
   "version": "1.0.0",
   "description": "Create a new TypeScript Create-React-App with Eslint & Prettier pre-configured.",
-  "main": "index.ts",
+  "main": "index.js",
   "bin": "index.js",
+  "keywords": [
+    "TypeScript + React",
+    "CRA",
+    "TypeScript",
+    "React",
+    "create-react-typescript"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/fentech/create-react-typescript.git"

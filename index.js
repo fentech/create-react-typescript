@@ -52,11 +52,11 @@ program
   .option("--npm")
   .action(async function(appName, cmd) {
     const settingsJson = await fs.readFileSync(
-      path.resolve("boilerplate/settings.json"),
+      path.resolve(__dirname + "boilerplate/settings.json"),
       "utf8"
     );
     const eslintrc = await fs.readFileSync(
-      path.resolve("boilerplate/.eslintrc.json"),
+      path.resolve(__dirname + "boilerplate/.eslintrc.json"),
       "utf8"
     );
     const pkgMngr = cmd.npm ? "npm" : "yarn";

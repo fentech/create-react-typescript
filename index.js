@@ -49,7 +49,8 @@ const executeStep = async (totalSteps, label, ...cmds) => {
 program
   .version(pkg.version)
   .arguments("<appName>")
-  .option("--npm")
+  .option("--npm", "Use NPM as the package manager.")
+  .option("--commitizen", "Install and setup commitizen")
   .action(async function(appName, cmd) {
     const settingsJson = await fs.readFileSync(
       path.resolve(__dirname + "/boilerplate/settings.json"),
@@ -116,8 +117,23 @@ program
       ]
     ];
 
-    if (cmd.npm)
+    if (cmd.commitizen)
+      steps.push([
+        { text: `Add commitizen` },
+        `yarn add -D commitizen`,
+        `npx commitizen init cz-conventional-changelog --save-dev --save-exact`,
+        `npx json -I -f ./package.json -e "this.scripts.commit=\\"git-cz\\""`
+      ]);
+
+    if (cmd.npm) {
       steps.push([{ text: "Cleaning up" }, `rm yarn.lock`, `npm install`]);
+    } else {
+      steps.push([
+        { text: "Cleaning up" },
+        `rm package-lock.json`,
+        `yarn install`
+      ]);
+    }
 
     steps.push([
       { text: `Creating initial commits` },

@@ -1,0 +1,11 @@
+{
+  "name": "create-react-typescript",
+  "version": "0.1.0",
+  "description": "Create a new TypeScript Create-React-App with Eslint & Prettier pre-configured.",
+  "main": "index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Joe Fensler",
+  "license": "ISC"
+}

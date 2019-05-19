@@ -18,7 +18,8 @@ const executeCmd = async cmd => {
     }
   });
 };
-const stringify = string => JSON.stringify(string).replace(/"/gm, `\"`);
+const escapeQuotes = string => string.replace(/("|')/gm, `\\$1`);
+const stringify = string => escapeQuotes(JSON.stringify(string));
 const compose = (...functions) => args =>
   functions.reduceRight((arg, fn) => fn(arg), args);
 const redConsoleText = string => `\x1b[31m${string}\x1b[0m`;
@@ -45,6 +46,14 @@ const executeStep = async (totalSteps, label, ...cmds) => {
     await cmd();
   });
 };
+const readFile = async filePath => {
+  const file = await fs.readFileSync(
+    path.resolve(__dirname + filePath),
+    "utf8"
+  );
+
+  return escapeQuotes(file);
+};
 
 program
   .version(pkg.version)
@@ -52,16 +61,12 @@ program
   .option("--npm", "Use NPM as the package manager.")
   .option("--commitizen", "Install and setup commitizen")
   .action(async function(appName, cmd) {
-    const settingsJson = await fs.readFileSync(
-      path.resolve(__dirname + "/boilerplate/settings.json"),
-      "utf8"
-    );
-    const eslintrc = await fs.readFileSync(
-      path.resolve(__dirname + "/boilerplate/.eslintrc.json"),
-      "utf8"
-    );
     const pkgMngr = cmd.npm ? "npm" : "yarn";
     const installCmd = pkgMngr === "yarn" ? `yarn add` : `npm i`;
+    const settingsJson = await readFile("/boilerplate/settings.json");
+    const eslintrc = await readFile("/boilerplate/.eslintrc.json");
+    const jestConfigJs = await readFile("/boilerplate/jest.config.js");
+    const eznymeSetup = await readFile("/boilerplate/enzymeSetup.ts");
 
     if (fs.existsSync(appName))
       return console.error(
@@ -114,6 +119,12 @@ program
       [
         { text: "Adding lint script to package.json" },
         `npx json -I -f ./package.json -e "this.scripts.lint=\\"tsc --noEmit && eslint '*/**/*.{js,ts,tsx}' --quiet --fix\\""`
+      ],
+      [
+        { text: "Add Jest & Enzyme" },
+        `${installCmd} -D jest @types/jest ts-jest @types/enzyme enzyme-to-json enzyme-adapter-react-16`,
+        `printf "${jestConfigJs}" >> jest.config.js`,
+        `printf "${eznymeSetup}" >> src/ezymeSetup.ts`
       ]
     ];
 
@@ -128,11 +139,11 @@ program
     if (cmd.npm) {
       steps.push([{ text: "Cleaning up" }, `rm yarn.lock`, `npm install`]);
     } else {
-      steps.push([
-        { text: "Cleaning up" },
-        `rm package-lock.json`,
-        `yarn install`
-      ]);
+      steps.push([{ text: "Cleaning up" }]);
+      const lastStepIndex = steps.length - 1;
+      if (fs.existsSync(`${appName}/package-lock.json`))
+        steps[lastStepIndex].push(`rm package-lock.json`);
+      steps[lastStepIndex].push(`yarn install`);
     }
 
     steps.push([

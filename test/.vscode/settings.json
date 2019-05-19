@@ -1,0 +1,13 @@
+{
+  "eslint": {
+    "autoFixOnSave": true,
+    "packageManager": "yarn",
+    "validate": [
+      "javascript",
+      "javascriptreact",
+      {"language": "typescript", "autoFix": true },
+      {"language": "typescriptreact", "autoFix": true }
+    ],
+    "alwaysShowStatus": true
+  }
+}

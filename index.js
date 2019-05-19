@@ -6,6 +6,7 @@ const { execSync } = require("child_process");
 const program = require("commander");
 const pkg = require("./package.json");
 const fs = require("fs");
+const path = require("path");
 
 const executeCmd = async cmd => {
   return await new Promise(async (resolve, reject) => {
@@ -51,11 +52,11 @@ program
   .option("--npm")
   .action(async function(appName, cmd) {
     const settingsJson = await fs.readFileSync(
-      "./boilerplate/settings.json",
+      path.resolve("boilerplate/settings.json"),
       "utf8"
     );
     const eslintrc = await fs.readFileSync(
-      "./boilerplate/.eslintrc.json",
+      path.resolve("boilerplate/.eslintrc.json"),
       "utf8"
     );
     const pkgMngr = cmd.npm ? "npm" : "yarn";

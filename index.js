@@ -67,6 +67,26 @@ program
     const eslintrc = await readFile("/boilerplate/.eslintrc.json");
     const jestConfigJs = await readFile("/boilerplate/jest.config.js");
     const eznymeSetup = await readFile("/boilerplate/enzymeSetup.ts");
+    const nodeVersionArr = process.version
+      .replace(/v([\d\.]+)/, "$1")
+      .split(".");
+    const nodeVersion = {
+      major: Number.parseInt(nodeVersionArr[0]),
+      minor: Number.parseInt(nodeVersionArr[1]),
+      patch: Number.parseInt(nodeVersionArr[3])
+    };
+
+    if (nodeVersion.major < 10)
+      return console.error(
+        compose(
+          boldConsoleText,
+          redConsoleText
+        )(
+          `Your current Node version is ${
+            process.version
+          }. Your Node version must be 10.* or above.`
+        )
+      );
 
     if (fs.existsSync(appName))
       return console.error(

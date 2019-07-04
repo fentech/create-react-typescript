@@ -117,7 +117,7 @@ program
       [
         { text: "Installing linters" },
         () => process.chdir(appName),
-        `${installCmd} -D eslint prettier eslint-config-prettier eslint-plugin-prettier eslint-plugin-react @typescript-eslint/eslint-plugin @typescript-eslint/parser`
+        `${installCmd} -D prettier eslint-config-prettier eslint-plugin-prettier eslint-plugin-react @typescript-eslint/eslint-plugin @typescript-eslint/parser`
       ],
       [
         { text: "Setting up linter pre-commit hooks" },
@@ -145,7 +145,7 @@ program
       ],
       [
         { text: "Add Jest & Enzyme" },
-        `${installCmd} -D jest @types/jest ts-jest @types/enzyme enzyme-to-json enzyme-adapter-react-16`,
+        `${installCmd} -D @types/jest ts-jest @types/enzyme enzyme-to-json enzyme-adapter-react-16 @types/enzyme-adapter-react-16 `,
         `printf "${jestConfigJs}" >> jest.config.js`,
         `printf "${eznymeSetup}" >> src/ezymeSetup.ts`
       ]
